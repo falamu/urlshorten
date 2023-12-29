@@ -13,7 +13,7 @@ def shortener(url, alias=None):
             shortened_url = alias
             
         else: 
-            # generate 8-10 word alphanumeric string based on randomly selected numbers
+            # generate 8-10 character alphanumeric string based on randomly selected numbers
             alphabet = string.ascii_letters + string.digits
             chars = len(alphabet) - 1
             DEFAULT_LENGTH = random.randint(8,10)
@@ -40,17 +40,17 @@ def shortener(url, alias=None):
 
     if alias: 
         check_shortened_urls(alias, check_type = 'alias')
-        shortened_url = _shorten(url, alias) # add logic to shorten the url here
+        shortened_url = _shorten(url, alias)
 
     else:
-        shortened_url = _shorten(url) # add logic to shorten the url 
+        shortened_url = _shorten(url)
 
     return shortened_url
 
 
 def check_shortened_urls(url, check_type):
     ''' 
-    lists all the urls that have been shortened 
+    checks if url has already been shortened 
     '''
     table = 'url_shorten'
     
@@ -61,7 +61,6 @@ def check_shortened_urls(url, check_type):
     else:
         raise TypeError('check type must be either `url` or `alias`')
 
-    print(url)
     with sqlite3.connect('url.db') as conn:
         check_url_stmt = f"SELECT * FROM {table} WHERE {field} = '{url}'"
         cur = conn.cursor()
@@ -71,9 +70,4 @@ def check_shortened_urls(url, check_type):
     if result is None:
         return 
     else: 
-        raise Exception(f'{field} already exists')
-
-# shortener('amazon.ca', alias='amazon')
-# shortener('google.com', alias='google')
-shortener('doordash.ca',)
-
+        raise Exception(f'{field} {url} already exists')
